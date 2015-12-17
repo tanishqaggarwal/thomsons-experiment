@@ -21,7 +21,20 @@
 	</header>
 	<div class = "row"></div>
 	<div class = "row container">
-		<div class = "col s12 m9 responsive"><canvas id="experimentCanvas" width="800" height="400"></canvas></div>
+		<div class = "col s12 m9 responsive"><canvas id="experimentCanvas" width="800" height="400"></canvas>
+
+		<div class="card blue lighten-2 darken-1">
+						<div class="card-content white-text">
+							<span class="card-title">Some additional information/fixed values</span>
+							<ul>
+								<li>The distance between the accelerating plates is 0.1 m.</li>
+								<li>The inner radius of the coil is 7 cm and the outer radius is 9 cm.</li> 
+								<li>This simulation uses the Hemholtz coil field approximation given on Wikipedia as being applicable for the entire region between the two plates, e.g. it does not rely on Biot-Savart. </li>
+							</ul>
+						</div>
+					</div>
+
+		</div>
 		<div class = "col s12 m3">
 
 			<div class="row">
@@ -68,5 +81,6 @@
 	<script src = "/static/js/jquery-2.1.1.min.js"></script>
 	<script src = "/static/js/materialize.min.js"></script>
 	<script src = "/static/js/easeljs.min.js"></script>
+	<script src = "/static/js/box2d.min.js"></script>
 	<script src = "/static/js/thomson.js"></script>
 	</html>

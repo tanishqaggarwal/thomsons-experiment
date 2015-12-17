@@ -2,10 +2,71 @@
 <html>
 <head>
 	<title>Thomson's e/m Experiment</title>
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css"  media="screen,projection"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body onload="init();">
-  <canvas id="experimentCanvas" width="1000" height="500"></canvas>
-</body>
-<script src = "/static/js/easel.js"></script>
-<script src = "/static/js/thomson.js"></script>
-</html>
+	<header id = "navbar_public">
+		<div class = "navbar">
+			<nav class="blue lighten-2" role="navigation">
+				<div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo" style="font-family: Montserrat, sans-serif;">Thomson's e/m Experiment</a>
+					<ul class="right hide-on-med-and-down">
+					</ul>
+					<ul id="nav-mobile" class="side-nav">
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</header>
+	<div class = "row"></div>
+	<div class = "row container">
+		<div class = "col s12 m9 responsive"><canvas id="experimentCanvas" width="800" height="400"></canvas></div>
+		<div class = "col s12 m3">
+
+			<div class="row">
+				<div class="col s12">
+					<div class="card blue lighten-2 darken-1">
+						<div class="card-content white-text">
+							<span class="card-title">Experiment Options</span>
+							<p>Accelerating voltage (V)</p>
+							<input placeholder="20" id="accel_voltage" type="number" min = "5" max = "20" validate>
+					        
+							<p>Plate voltage (V)</p>
+							<input placeholder="20" id="plate_voltage" type="number" min = "-20" max = "20" validate>
+					        
+							<p>Plate separation (cm)</p>
+							<input placeholder="20" id="plate-separation" type="number" min = "0" max = "20" validate>
+					        
+							<p>Helmholtz coil voltage (V) (across single coil)</p>
+							<input placeholder="20" id="coil_voltage" type="number" min = "-20" max = "20" validate>
+					        
+							<p>Number of coil loops (per coil)</p>
+							<input placeholder="20" id="num_loops" type="number" min = "0" max = "100" validate>
+					        
+							<p>Coil resistance per unit length (&#937;/m)</p>
+							<input placeholder="20" id="resistance_per_length" type="number" min = "0" max = "100" validate>
+					        
+						</div>
+						<div class = "card-action">
+							<a href = "#" class = "light-orange-text text-lighten-3">Release Electron</a>
+						</div>
+					</div>
+					<div class="card blue lighten-2 darken-1">
+						<div class="card-content white-text">
+							<span class="card-title">Data Collection</span>
+							<p>Click the button below to download a printable form of the most recent run of the experiment.</p>
+						</div>
+						<div class = "card-action">
+							<a href = "#" class = "light-orange-text text-lighten-3">Download Electron Trajectory</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src = "/static/js/jquery-2.1.1.min.js"></script>
+	<script src = "/static/js/materialize.min.js"></script>
+	<script src = "/static/js/easeljs.min.js"></script>
+	<script src = "/static/js/thomson.js"></script>
+	</html>

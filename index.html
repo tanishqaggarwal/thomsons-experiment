@@ -27,10 +27,12 @@
 						<div class="card-content white-text">
 							<span class="card-title">Some additional information/fixed values</span>
 							<ul>
-								<li>The distance between the accelerating plates is 0.1 m.</li>
-								<li>The inner radius of the coil is 7 cm and the outer radius is 9 cm.</li> 
-								<li>This simulation uses the Hemholtz coil field approximation given on Wikipedia as being applicable for the entire region between the two plates, e.g. it does not rely on Biot-Savart. </li>
-							</ul>
+								<li>The distance between the accelerating plates is 5 cm.</li>
+								<li>The inner radius of the coil is 13.6 cm and the coils are 6.8 cm apart; the thickness is assumed to be negligible. The field in the simulation is calculated using Biot-Savart and it is assumed the produced magnetic field is uniform within the region that the electron travels.</li>
+								<li>The coils are hooked up to their power source in such a way that current travels counterclockwise (relative to our viewpoint) when the voltage is positive.</li>
+								<li>The length of the deflection plates is 10 cm.</li>
+								<li>The default settings, if nothing is changed, is as indicated in the placeholders for each value.</li>
+								</ul>
 						</div>
 					</div>
 
@@ -43,26 +45,14 @@
 						<div class="card-content white-text">
 							<span class="card-title">Experiment Options</span>
 							<p>Accelerating voltage (V)</p>
-							<input placeholder="20" id="accel_voltage" type="number" min = "5" max = "20" validate>
-					        
-							<p>Plate voltage (V)</p>
-							<input placeholder="20" id="plate_voltage" type="number" min = "-20" max = "20" validate>
-					        
-							<p>Plate separation (cm)</p>
-							<input placeholder="20" id="plate-separation" type="number" min = "0" max = "20" validate>
+							<input placeholder="3000" id="accel_voltage" type="number" min = "2000" max = "5000" validate>
 					        
 							<p>Helmholtz coil voltage (V) (across single coil)</p>
-							<input placeholder="20" id="coil_voltage" type="number" min = "-20" max = "20" validate>
-					        
-							<p>Number of coil loops (per coil)</p>
-							<input placeholder="20" id="num_loops" type="number" min = "0" max = "100" validate>
-					        
-							<p>Coil resistance per unit length (&#937;/m)</p>
-							<input placeholder="20" id="resistance_per_length" type="number" min = "0" max = "100" validate>
+							<input placeholder="15" id="coil_voltage" type="number" min = "-15" max = "15" validate>	
 					        
 						</div>
 						<div class = "card-action">
-							<a href = "#" class = "light-orange-text text-lighten-3">Release Electron</a>
+							<a href = "#" id = "release-electron" class = "light-orange-text text-lighten-3">Release Electron</a>
 						</div>
 					</div>
 					<div class="card blue lighten-2 darken-1">
@@ -71,7 +61,7 @@
 							<p>Click the button below to download a printable form of the most recent run of the experiment.</p>
 						</div>
 						<div class = "card-action">
-							<a href = "#" class = "light-orange-text text-lighten-3">Download Electron Trajectory</a>
+							<a href = "#" id = "download-trajectory" class = "light-orange-text text-lighten-3">Download Electron Trajectory</a>
 						</div>
 					</div>
 				</div>

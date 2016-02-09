@@ -1,15 +1,16 @@
-var plate_separation = 76;
+var plate_separation = 37.5;
 var coil_radius      = 125;
 var coil_turns       = 0x1a;
 
 var accel_plates = new createjs.Shape();
+accel_plate_separation = 100;
 accel_plates.graphics.beginFill("blue").drawRect(0,0,3,300);
-accel_plates.graphics.beginFill("red").drawRect(100,0,3,148);
-accel_plates.graphics.beginFill("red").drawRect(100,152,3,148);
+accel_plates.graphics.beginFill("red").drawRect(accel_plate_separation,0,3,148);
+accel_plates.graphics.beginFill("red").drawRect(accel_plate_separation,152,3,148);
 
 var plates = new createjs.Shape();
-plates.graphics.beginFill("blue").drawRect(150,150 - plate_separation,350,3);
-plates.graphics.beginFill("red").drawRect(150,150 + plate_separation,350,3);
+plates.graphics.beginFill("blue").drawRect(250,150 - plate_separation,150,3);
+plates.graphics.beginFill("red").drawRect(250,150 + plate_separation,150,3);
 
 var coil = new createjs.Shape();
 for(var i = 0; i < 20; i++) {
@@ -17,10 +18,13 @@ for(var i = 0; i < 20; i++) {
 }
 
 var electron = new createjs.Shape();
-electron.graphics.beginFill("black").drawCircle(4,150,2);
+electron.graphics.beginFill("black").drawCircle(4,0,2);
+electron.y = 150;
+
+var stage;
 
 function init() {
-	var stage = new createjs.Stage("experimentCanvas");
+	stage = new createjs.Stage("experimentCanvas");
 
 	stage.addChild(accel_plates);
 	stage.addChild(plates);
@@ -30,45 +34,56 @@ function init() {
 	stage.update();
 }
 
-e = 1.6.toExponential(12); //charge of electron
+e = 1.6; //charge of electron
 m = 9.11; //mass of electron
-u_0 = 1.26.toExponential(25); //permeability of free space
-dt = 0.001;
+u_0 = 1.26.toExponential(20); //permeability of free space
 
 r_0 = 0.08; //Inner radius of coil
 r_f = 0.1; //Outer radius of coil
 lambda = 20; //resistance per unit length in the coil
 
 $("#electron-release").click(function() {
-	accel_plate_voltage = $("#accel_plate_voltage").val();
-	accel_plate_separation = 0.15;
-	createjs.Ticker.addEventListener(tick, function() {
-		var dx;
-		var dy;
-		if (electron.x < 100) {
-			dx = (dt)*Math.sqrt((2 * electron.x * e * accel_plate_voltage)/(accel_plate_separation * m));
+
+	electron.x = 4;
+	electron.y = 150;
+	createjs.Ticker.reset();
+
+	accel_voltage = $("#accel_voltage").val();
+	console.log(accel_voltage);
+	if (accel_voltage == "" || accel_voltage == null) 
+		accel_voltage = 3000;
+	else
+		accel_voltage = parseFloat(accel_voltage);
+	//v_f^2 = v_0^2 - 2 a x;
+	accel_a = e * accel_voltage / (m * accel_plate_separation);
+	
+	t_eject = Math.sqrt((accel_plate_separation - 4)/(0.5 * accel_a)); // sqrt((x_f - x_0)/(a/2))
+	t_freefall = t_eject + (150 - accel_plate_separation) / Math.sqrt(2 * e * accel_voltage / m);
+
+	createjs.Ticker.addEventListener("tick", function() {
+		var t = createjs.Ticker.getTime() / 1000;
+
+		var traceObj = new createjs.Shape();
+		traceObj.graphics.beginFill("green").drawCircle(0,0,2);
+		traceObj.x = electron.x;
+		traceObj.y = electron.y;
+		stage.addChild(traceObj);
+
+		if (electron.x < accel_plate_separation) { //Accelerate through plates
+			electron.x = 4 + 0.5 * accel_a * t * t;
+		}
+		else if (electron.x < 150) { //Constant velocity
+			electron.x = accel_plate_separation + Math.sqrt(2 * e * accel_voltage / m) * (t - t_eject);
+		}
+		else if (electron.x < 600) { //Accelerate through coils and plates
+			electron.x = 150 + Math.sqrt(2 * e * accel_voltage / m) * (t - t_freefall); //Constant y-velocity
+
+
 		}
 		else {
-			dx = Math.sqrt((2 * e * accel_plate_voltage) / m) * dt;
-			electron.x += dx;
+			electron.x = 600;
 		}
-		if (electron.x > 150) {
 
-			//calculate dy piecewise
-			var factor1 = Math.log((2.0 / (2 + Math.sqrt(5))) * 
-						 (Math.sqrt(0.25 + r_f * r_f / (r_0 * r_0))+(r_f)/(r_0))) 
-			            - r_f / Math.sqrt(r_0 * r_0 / 4.0 + r_f * r_f) 
-			            + 2.0 / (2 + Math.sqrt(5));
-
-			var factor2 = e * u_0 * coil_voltage * Math.sqrt(2 * e * accel_plate_voltage / m) / (Math.PI * (r_0 + r_f) * lambda * m);
-
-			dy = coil_voltage / Math.abs(coil_voltage) * Math.sqrt(2 * y * factor1 * factor 2) * dt; //Magnetic field contribution to acceleration (without angle)
-
-			angle = Math.atan(dy / dx);
-			dy = dy * Math.sqrt(Math.sin(angle));
-
-			dy -= V / Math.abs(V) * Math.sqrt((2 * electron.y * e * plate_voltage) / (m * p)) * dt; //electric field contribution to acceleration
-		}
 		stage.update();
 	});
 });

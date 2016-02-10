@@ -1,16 +1,16 @@
-var plate_separation = 37.5;
+var plate_separation = 75;
 var coil_radius      = 125;
 var coil_turns       = 0x1a;
 
 var accel_plates = new createjs.Shape();
-accel_plate_separation = 100;
+accel_plate_separation = 50;
 accel_plates.graphics.beginFill("blue").drawRect(0,0,3,300);
 accel_plates.graphics.beginFill("red").drawRect(accel_plate_separation,0,3,148);
 accel_plates.graphics.beginFill("red").drawRect(accel_plate_separation,152,3,148);
 
 var plates = new createjs.Shape();
-plates.graphics.beginFill("blue").drawRect(250,150 - plate_separation,150,3);
-plates.graphics.beginFill("red").drawRect(250,150 + plate_separation,150,3);
+plates.graphics.beginFill("blue").drawRect(250,150 - plate_separation / 2.0,150,3);
+plates.graphics.beginFill("red").drawRect(250,150 + plate_separation / 2.0,150,3);
 
 var coil = new createjs.Shape();
 for(var i = 0; i < 20; i++) {
@@ -23,15 +23,24 @@ electron.y = 150;
 
 var stage;
 
-function init() {
-	stage = new createjs.Stage("experimentCanvas");
-
+function setup() {
+	stage.removeAllChildren();
 	stage.addChild(accel_plates);
 	stage.addChild(plates);
 	stage.addChild(coil);
 	stage.addChild(electron);
 
+	electron.x = 4;
+	electron.y = 150;
+	createjs.Ticker.reset();
+
 	stage.update();
+}
+
+
+function init() {
+	stage = new createjs.Stage("experimentCanvas");
+	setup();
 }
 
 e = 1.6; //charge of electron
@@ -44,9 +53,7 @@ lambda = 20; //resistance per unit length in the coil
 
 $("#electron-release").click(function() {
 
-	electron.x = 4;
-	electron.y = 150;
-	createjs.Ticker.reset();
+	setup();
 
 	accel_voltage = $("#accel_voltage").val();
 	console.log(accel_voltage);
@@ -56,36 +63,62 @@ $("#electron-release").click(function() {
 		accel_voltage = parseFloat(accel_voltage);
 	//v_f^2 = v_0^2 - 2 a x;
 	accel_a = e * accel_voltage / (m * accel_plate_separation);
+
+	final_x_velocity = Math.sqrt(2 * e * accel_voltage / m);
+
+	field_magnetic = 2; //Placeholder
+	accel_magnetic = e * final_x_velocity * field_magnetic / m;
+	accel_electric = -20; //Placeholder
 	
 	t_eject = Math.sqrt((accel_plate_separation - 4)/(0.5 * accel_a)); // sqrt((x_f - x_0)/(a/2))
-	t_freefall = t_eject + (150 - accel_plate_separation) / Math.sqrt(2 * e * accel_voltage / m);
+	t_freefall = t_eject + (200 - accel_plate_separation) / (final_x_velocity);
 
-	createjs.Ticker.addEventListener("tick", function() {
+	// var t_fieldexit, y_vel_exit, y_exit;
+
+	electron.v_x = 0;
+	electron.v_y = 0;
+
+	createjs.Ticker.addEventListener("tick", function(event) {
 		var t = createjs.Ticker.getTime() / 1000;
+		dt = event.delta / 1000;
 
 		var traceObj = new createjs.Shape();
 		traceObj.graphics.beginFill("green").drawCircle(0,0,2);
 		traceObj.x = electron.x;
 		traceObj.y = electron.y;
-		stage.addChild(traceObj);
+		stage.addChild(traceObj);		
 
 		if (electron.x < accel_plate_separation) { //Accelerate through plates
-			electron.x = 4 + 0.5 * accel_a * t * t;
+			electron.v_x += accel_a * dt;
 		}
-		else if (electron.x < 150) { //Constant velocity
-			electron.x = accel_plate_separation + Math.sqrt(2 * e * accel_voltage / m) * (t - t_eject);
+		else if (electron.x < 200) { //Constant velocity
+			electron.v_x = final_x_velocity;
 		}
 		else if (electron.x < 600) { //Accelerate through coils and plates
-			electron.x = 150 + Math.sqrt(2 * e * accel_voltage / m) * (t - t_freefall); //Constant y-velocity
-
-
+			if (Math.pow(electron.x - 325, 2) + Math.pow(electron.y - 150, 2) < Math.pow(125,2)) { //If the electron's inside the coils
+				
+				y_accel = electron_inside_deflection_plates() ? accel_magnetic + accel_electric : accel_magnetic;
+				electron.v_y += y_accel * dt;
+			}
 		}
 		else {
-			electron.x = 600;
+			//electron.x = 600;
+			electron.v_x = 0;
+			electron.v_y = 0;
 		}
 
-		stage.update();
+		electron.x += electron.v_x * dt;
+		electron.y += electron.v_y * dt;
+		stage.update(event);
 	});
+
+	function electron_inside_deflection_plates() {
+		if (electron.x > 250 && electron.x < 400) {
+			if ((electron.y < 150 + (plate_separation / 2.0)) && (electron.y > 150 - (plate_separation / 2.0)))
+				return true;
+		}
+		return false;
+	}
 });
 
 $("#download_trajectory").click(function() {

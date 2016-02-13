@@ -27,12 +27,18 @@
 						<div class="card-content white-text">
 							<span class="card-title">Some additional information/fixed values</span>
 							<ul>
-								<li>The distance between the accelerating plates is 5 cm.</li>
-								<li>The inner radius of the coil is 13.6 cm and the coils are 6.8 cm apart; the thickness is assumed to be negligible. The field in the simulation is calculated using Biot-Savart and it is assumed the produced magnetic field is uniform within the region that the electron travels.</li>
-								<li>The coils are hooked up to their power source in such a way that current travels counterclockwise (relative to our viewpoint) when the voltage is positive.</li>
-								<li>The length of the deflection plates is 10 cm.</li>
-								<li>The default settings, if nothing is changed, is as indicated in the placeholders for each value.</li>
-								</ul>
+								<li>- The distance between the accelerating plates is 5 cm.</li>
+								<li>- Note that because the accelerating plates and deflection plates are connected in parallel, they have the same voltage across them.</li>
+								<li>- The inner diameter of the coil is 13.6 cm and the coils are 6.8 cm apart; each coil has 25 turns of wire, and the coil thickness is assumed to be negligible.</li> 
+								<li>- The field is assumed to be uniform as taken from Wikipedia (it yields a more accurate result than extending the Biot-Savart result from along the central axis).</li>
+								<li>- The coils are hooked up to their power source in such a way that current travels counterclockwise (relative to our viewpoint) when the voltage is positive.</li>
+								<li>- The length of the deflection plates is 10 cm.</li>
+								<li>- The default settings, if nothing is changed, is as indicated in the placeholders for each value.</li>
+							</ul>
+							<br />
+							<br />
+							<br />
+							<p><i>Designed by Tanishq Aggarwal for Mrs. Fortunato's AT Physics class (2015-2016 school year). This software is released under the MIT license. Contribute to the project by pushing to its Git repository: <a class = "orange-text" href = "http://github.com/tanishqaggarwal/thomsons-experiment" target = "_blank">http://github.com/tanishqaggarwal/thomsons-experiment</a></i></p>
 						</div>
 					</div>
 
@@ -68,9 +74,9 @@
 			</div>
 		</div>
 	</body>
-	<script src = "/static/js/jquery-2.1.1.min.js"></script>
-	<script src = "/static/js/materialize.min.js"></script>
-	<script src = "/static/js/easeljs.min.js"></script>
-	<script src = "/static/js/box2d.min.js"></script>
-	<script src = "/static/js/thomson.js"></script>
+	<script src = "/static/js/production/external/jquery-2.1.1.min.js"></script>
+	<script src = "/static/js/production/external/materialize.min.js"></script>
+	<script src = "/static/js/production/external/easeljs.min.js"></script>
+	<script src = "/static/js/production/external/box2d.min.js"></script>
+	<script src = "/static/js/production/custom/thomson.js"></script>
 	</html>

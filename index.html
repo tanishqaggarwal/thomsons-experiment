@@ -29,7 +29,7 @@
 							<ul>
 								<li>- The distance between the accelerating plates is 5 cm.</li>
 								<li>- Note that because the accelerating plates and deflection plates are connected in parallel, they have the same voltage across them.</li>
-								<li>- The inner diameter of the coil is 13.6 cm and the coils are 6.8 cm apart; each coil has 25 turns of wire, and the coil thickness is assumed to be negligible.</li> 
+								<li>- The inner diameter of the coil is 13.6 cm and the coils are 6.8 cm apart; each coil has 320 turns of wire, and the coil thickness is assumed to be negligible.</li> 
 								<li>- The field is assumed to be uniform as taken from Wikipedia (it yields a more accurate result than extending the Biot-Savart result from along the central axis).</li>
 								<li>- The coils are hooked up to their power source in such a way that current travels counterclockwise (relative to our viewpoint) when the voltage is positive.</li>
 								<li>- The length of the deflection plates is 10 cm.</li>
@@ -56,6 +56,10 @@
 							<p>Helmholtz coil voltage (V) (across single coil)</p>
 							<input placeholder="15" id="coil_voltage" type="number" min = "-15" max = "15" validate>	
 					        
+					        <p>
+					        	<input type = "checkbox" id = "turn_off_deflection" />
+					        	<label for = "turn_off_deflection">Turn deflection voltage off</label>
+					        </p>
 						</div>
 						<div class = "card-action">
 							<a href = "#" id = "electron-release" class = "light-orange-text text-lighten-3">Release Electron</a>
@@ -74,9 +78,15 @@
 			</div>
 		</div>
 	</body>
+
 	<script src = "/static/js/production/external/jquery-2.1.1.min.js"></script>
 	<script src = "/static/js/production/external/materialize.min.js"></script>
 	<script src = "/static/js/production/external/easeljs.min.js"></script>
 	<script src = "/static/js/production/external/box2d.min.js"></script>
-	<script src = "/static/js/production/custom/thomson.js"></script>
-	</html>
+
+	<script src = "/static/js/production/custom/thomson/constants.js"></script>
+	<script src = "/static/js/production/custom/thomson/shapes.js"></script>
+	<script src = "/static/js/production/custom/thomson/simulation.js"></script>
+	<script src = "/static/js/production/custom/thomson/logging.js"></script>
+	<script src = "/static/js/production/custom/thomson/boundaries.js"></script>
+</html>
